@@ -15,11 +15,12 @@ import {
 import MainContainer from './navigation/MainContainer';
 
 import { NavigationContainer } from '@react-navigation/native';
+import 'react-native-gesture-handler';
 
 function App(): React.JSX.Element {
   return (
     <NavigationContainer>
-      <MainContainer></MainContainer>
+      <MainContainer/>
     </NavigationContainer>
   );
 }

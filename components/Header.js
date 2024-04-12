@@ -11,4 +11,6 @@ const Header = () => {
 
 export default Header
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  
+})
