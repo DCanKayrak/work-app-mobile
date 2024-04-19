@@ -62,7 +62,7 @@ const HomeScreen = () => {
       }, 1000);
     } else if (counter === 0) {
       clearInterval(interval);
-      changeActiveStatus(TimerStatus[1]);
+      status.id === TimerStatus[0].id ? changeActiveStatus(TimerStatus[1]) : changeActiveStatus(TimerStatus[0]);
     }
     return () => clearInterval(interval);
   }, [isRunning, counter]);
