@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Header from '../../components/Header';
 
 const HomeScreen = () => {
@@ -24,7 +25,7 @@ const HomeScreen = () => {
     },
   ];
 
-  const [streak, setStreak] = useState(0);
+  const [dailyStreak, setDailyStreak] = useState(0);
   const [status, setStatus] = useState(TimerStatus[0]);
 
   const [counter, setCounter] = useState(status.duration);
@@ -53,6 +54,20 @@ const HomeScreen = () => {
     setCounter(0);
   };
 
+  const handleDailyStreak = () => {
+    if(status.id == TimerStatus[0].id){
+      setDailyStreak((prev) => Number(prev) + 1);
+    }
+  }
+
+  useEffect(() => {
+    AsyncStorage.getItem('dailyStreak').then(value => setDailyStreak(value));
+
+    if(dailyStreak == null){
+      AsyncStorage.setItem('dailyStreak',Number(0));
+    }
+  },[])
+
   useEffect(() => {
     let interval;
     if (isRunning && counter > 0) {
@@ -62,6 +77,7 @@ const HomeScreen = () => {
       }, 1000);
     } else if (counter === 0) {
       clearInterval(interval);
+      handleDailyStreak();
       status.id === TimerStatus[0].id ? changeActiveStatus(TimerStatus[1]) : changeActiveStatus(TimerStatus[0]);
     }
     return () => clearInterval(interval);
@@ -93,6 +109,7 @@ const HomeScreen = () => {
         </ScrollView>
 
         <Text style={styles.timer}>{displayTime}</Text>
+        <Text style={styles.streak}>{'#' + dailyStreak}</Text>
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={handleRestart} style={styles.button}>
@@ -151,4 +168,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white'
   },
+  streak: {
+    color: 'gray'
+  }
 });
