@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-nati
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Header from '../../components/Header';
+import { GetWithAuth, GetWithoutAuth } from '../../services/HttpService';
+import CheckBox from '@react-native-community/checkbox';
 
 const HomeScreen = () => {
   const TimerStatus = [
@@ -33,6 +35,12 @@ const HomeScreen = () => {
 
   const [isRunning, setIsRunning] = useState(false);
 
+  const handleGetDatas = () => {
+    GetWithoutAuth("https://dummyjson.com/products/1")
+      .then(res => res.json())
+      .then(json => console.log(json))
+  }
+
   const calculateDisplayTime = () => {
     const minutes = Math.floor(counter / 60);
     const seconds = counter % 60;
@@ -55,7 +63,7 @@ const HomeScreen = () => {
   };
 
   const handleDailyStreak = () => {
-    if(status.id == TimerStatus[0].id){
+    if (status.id == TimerStatus[0].id) {
       setDailyStreak((prev) => Number(prev) + 1);
     }
   }
@@ -63,10 +71,12 @@ const HomeScreen = () => {
   useEffect(() => {
     AsyncStorage.getItem('dailyStreak').then(value => setDailyStreak(value));
 
-    if(dailyStreak == null){
-      AsyncStorage.setItem('dailyStreak',Number(0));
+    handleGetDatas()
+
+    if (dailyStreak == null) {
+      AsyncStorage.setItem('dailyStreak', Number(0));
     }
-  },[])
+  }, [])
 
   useEffect(() => {
     let interval;
@@ -125,6 +135,7 @@ const HomeScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
+      <Text style={styles.title}>Bugünkü bitirmeniz gereken görevleriniz:</Text>
     </View>
   );
 };
@@ -170,5 +181,11 @@ const styles = StyleSheet.create({
   },
   streak: {
     color: 'gray'
+  },
+  title: {
+    'color': 'black',
+    'textAlign': 'center',
+    'fontSize': 18,
+    'marginVertical': 20
   }
 });
