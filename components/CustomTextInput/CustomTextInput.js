@@ -22,7 +22,8 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         marginBottom: 10,
         padding: 8,
-        color: 'black'
+        color: 'black',
+        borderRadius: 5,
     },
     title: {
         color: 'black'

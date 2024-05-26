@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import type {PropsWithChildren} from 'react';
+import type { PropsWithChildren } from 'react';
 import {
   Text,
   View,
@@ -16,12 +16,14 @@ import MainContainer from './navigation/MainContainer';
 
 import { NavigationContainer } from '@react-navigation/native';
 import 'react-native-gesture-handler';
+import { AuthProvider } from './contexts/AuthContext';
+import AppNav from './navigation/AppNav';
 
 function App(): React.JSX.Element {
   return (
-    <NavigationContainer>
-      <MainContainer/>
-    </NavigationContainer>
+    <AuthProvider>
+      <AppNav></AppNav>
+    </AuthProvider>
   );
 }
 

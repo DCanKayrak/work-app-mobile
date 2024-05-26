@@ -1,74 +1,103 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Button, StyleSheet, Text, View } from 'react-native'
+import React, { useState, useEffect, useCallback } from 'react'
+import { TextInput } from 'react-native-gesture-handler'
+import CustomTextInput from '../../components/CustomTextInput/CustomTextInput'
+import { PostWithoutAuth } from '../../services/HttpService'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 
-const Register = () => {
+const Login = () => {
+    const [firstname, setFirstName] = useState("");
+    const [lastname, setLastName] = useState("");
     const [email, setEmail] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
     const [password, setPassword] = useState("");
-    const [repassword, setRepassword] = useState("");
 
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
 
-    const navigate = useNavigate();
+    const [data, setData] = useState({});
+
+    const navigation = useNavigation();
 
     const sendRequest = () => {
-        PostWithoutAuth(("https://localhost:7048/api/Auth/Register"),{
+        PostWithoutAuth("/api/Auth/Register", {
+            firstname: firstname,
+            lastname: lastname,
             email: email,
-            firstName: firstName,
-            lastName: lastName,
-            password:password
+            password: password,
+            userType: 0,
         })
             .then((res) => res.json())
             .then((result) => {
-                if(result.success){
-                    setError(null)
-                    setSuccess(result.message)
-                    navigate("/")
+                if (result.success) {
+                    setError(null);
+                    AsyncStorage.setItem("tokenKey", result.data.token);
+                    setSuccess(result.message);
+                    setData(result);
+                    navigation.navigate("Home");
+                } else {
+                    setSuccess(null);
+                    console.log(result.message);
+                    setError(result.message);
                 }
-                else {
-                    setSuccess(null)
-                    console.log(result.message)
-                    setError(result.message)
-                }
-                
-            }).catch((err) => console.log(err.message))
+            })
+            .catch((err) => console.log(err.message));
     }
 
-
-    const handleRegister = () => {
-        if (password === repassword) {
-            sendRequest()
-        }
-        else {
-            console.log("Şifreler aynı değil.")
-        }
-        
-        setEmail("")
-        setFirstName("")
-        setLastName("")
-        setPassword("")
+    const ClearTextBoxes = () => {
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setPassword("");
     }
 
-    useEffect(() => {
-    },[email,password,error])
+    const HandleRegister = () => {
+        sendRequest();
+        ClearTextBoxes();
+    }
 
+    useFocusEffect(
+        useCallback(() => {
+            ClearTextBoxes();
+        }, [])
+    );
 
     return (
         <View>
-            <Text>Register</Text>
-            <View>
-                <TextInput placeholder='Mail Address'></TextInput>
-                <TextInput placeholder='Username'></TextInput>
-                <TextInput placeholder='Password'></TextInput>
-                <TextInput placeholder='Re-Password'></TextInput>
-                <Button title='Register'></Button>
+            <View style={styles.container}>
+                <Text style={styles.title}>Kayıt Ol!</Text>
+                <CustomTextInput text={'First Name'} val={firstname} setVal={setFirstName} />
+                <CustomTextInput text={'Email'} val={lastname} setVal={setLastName} />
+                <CustomTextInput text={'Email'} val={email} setVal={setEmail} />
+                <CustomTextInput text={'Password'} val={password} setVal={setPassword} />
+                <Button title='Register' onPress={HandleRegister} />
+                {error && <Text style={styles.error}>{error}</Text>}
+                {success && <Text style={styles.success}>{success}</Text>}
             </View>
         </View>
     )
 }
 
-export default Register
+export default Login
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container : {
+        "justifyContent" : "center",
+        "marginHorizontal" : 50,
+        "marginVertical" : 25
+    },
+    title : {
+        "fontSize" : 30,
+        "color" : 'black',
+        "textAlign" : "center"
+    },
+    black: {
+        color: 'black'
+    },
+    error: {
+        color: 'red'
+    },
+    success: {
+        color: 'green'
+    }
+})

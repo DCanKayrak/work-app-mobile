@@ -1,10 +1,11 @@
 import { Button, StyleSheet, Text, View } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { TextInput } from 'react-native-gesture-handler'
 import CustomTextInput from '../../components/CustomTextInput/CustomTextInput'
 import { PostWithoutAuth } from '../../services/HttpService'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
+import { AuthContext } from '../../contexts/AuthContext'
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -16,31 +17,9 @@ const Login = () => {
     const [data, setData] = useState({});
 
     const navigation = useNavigation();
-
-    const sendRequest = () => {
-        PostWithoutAuth("/api/Auth/Login", {
-            email: email,
-            password: password
-        })
-            .then((res) => res.json())
-            .then((result) => {
-                if (result.success) {
-                    setError(null);
-                    AsyncStorage.setItem("tokenKey", result.data.token);
-                    setSuccess(result.message);
-                    setData(result);
-                    navigation.navigate("Home");
-                } else {
-                    setSuccess(null);
-                    console.log(result.message);
-                    setError(result.message);
-                }
-            })
-            .catch((err) => console.log(err.message));
-    }
+    const {login, userToken} = useContext(AuthContext);
 
     const handleLogin = () => {
-        sendRequest();
         setEmail("");
         setPassword("");
     }
@@ -54,7 +33,7 @@ const Login = () => {
                 <Text style={styles.title}>Giriş Yap</Text>
                 <CustomTextInput text={'Email'} val={email} setVal={setEmail} />
                 <CustomTextInput text={'Password'} val={password} setVal={setPassword} />
-                <Button title='Login' onPress={handleLogin} />
+                <Button title='Login' onPress={() => login(email, password)} />
                 {error && <Text style={styles.error}>{error}</Text>}
                 {success && <Text style={styles.success}>{success}</Text>}
             </View>
