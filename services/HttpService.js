@@ -1,7 +1,9 @@
-const baseUrl = ""
+import { BACKEND_URL, BACKEND_PORT } from "../configurations/ApplicationConfig";
+
+const BASE_URL = BACKEND_URL + ':' + BACKEND_PORT
 
 const GetFullUrl = (path) => {
-    return path ? baseUrl + path : baseUrl
+    return path ? BASE_URL + path : BASE_URL
 }
 
 const GetAuthorize = () => {
@@ -10,7 +12,7 @@ const GetAuthorize = () => {
 
 export const GetWithAuth = (url) => {
 
-    var request = fetch(baseUrl + url, {
+    var request = fetch(BACKEND_URL + url, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
