@@ -1,12 +1,14 @@
 import React, { createContext, useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { PostWithoutAuth } from '../services/HttpService';
+import { useNavigation } from '@react-navigation/native';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
     const [isLoading, setIsLoading] = useState(null);
     const [userToken, setUserToken] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(null);
 
     const login = (email, password) => {
         setIsLoading(true);
@@ -17,12 +19,10 @@ export const AuthProvider = ({children}) => {
             .then((res) => res.json())
             .then((result) => {
                 if (result.success) {
-                    //setError(null);
                     AsyncStorage.setItem("userToken", result.data.token);
-                    //setSuccess(result.message);
+                    console.log(result.message);
                     setUserToken(result.data.token);
                 } else {
-                    //setSuccess(null);
                     console.log(result.message);
                     //setError(result.message);
                 }
@@ -39,7 +39,7 @@ export const AuthProvider = ({children}) => {
         setIsLoading(false);
     }
 
-    const isLoggedIn = async() => {
+    const CheckLoggedIn = async() => {
         try {
             let userToken = await AsyncStorage.getItem('tokenKey');  
             setUserToken(userToken);
@@ -51,8 +51,12 @@ export const AuthProvider = ({children}) => {
     }
 
     useEffect(() => {
-        isLoggedIn();
+        CheckLoggedIn();
     },[])
+
+    useEffect(() => {
+        setIsLoggedIn(userToken !== null);
+    }, [userToken]);
 
     return (
         <AuthContext.Provider value={{login, logout, isLoading, userToken}}>

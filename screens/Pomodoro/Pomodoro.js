@@ -5,6 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Header from '../../components/Header';
 import { GetWithAuth, GetWithoutAuth } from '../../services/HttpService';
 import CheckBox from '@react-native-community/checkbox';
+import CircularProgress from 'react-native-circular-progress-indicator';
+import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 
 const PomodoroScreen = () => {
     const TimerStatus = [
@@ -32,14 +34,9 @@ const PomodoroScreen = () => {
 
     const [counter, setCounter] = useState(status.duration);
     const [displayTime, setDisplayTime] = useState('25:00');
+    const [timerReset, setTimerReset] = useState(false);
 
     const [isRunning, setIsRunning] = useState(false);
-
-    const handleGetDatas = () => {
-        GetWithoutAuth("https://dummyjson.com/products/1")
-            .then(res => res.json())
-            .then(json => console.log(json))
-    }
 
     const calculateDisplayTime = () => {
         const minutes = Math.floor(counter / 60);
@@ -54,7 +51,8 @@ const PomodoroScreen = () => {
     };
 
     const handleRestart = () => {
-        setIsRunning(false)
+        setTimerReset((prev) => !prev);
+        setIsRunning(false);
         setCounter(status.duration);
     };
 
@@ -70,8 +68,6 @@ const PomodoroScreen = () => {
 
     useEffect(() => {
         AsyncStorage.getItem('dailyStreak').then(value => setDailyStreak(value));
-
-        handleGetDatas()
 
         if (dailyStreak == null) {
             AsyncStorage.setItem('dailyStreak', Number(0));
@@ -118,8 +114,19 @@ const PomodoroScreen = () => {
                     }
                 </ScrollView>
 
-                <Text style={styles.timer}>{displayTime}</Text>
-                <Text style={styles.streak}>{'#' + dailyStreak}</Text>
+                <CountdownCircleTimer
+                    isPlaying={isRunning}
+                    duration={status.duration}
+                    key={timerReset}
+                    initialRemainingTime={status.duration}
+                    colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+                    colorsTime={[status.duration - 10,status.duration - 20 , status.duration - 30, status.duration - 40]}
+                >
+                    {() => <>
+                        <Text style={styles.timer}>{displayTime}</Text>
+                        <Text style={styles.streak}>{'#' + dailyStreak}</Text>
+                    </>}
+                </CountdownCircleTimer>
 
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity onPress={handleRestart} style={styles.button}>
@@ -153,7 +160,7 @@ const styles = StyleSheet.create({
     },
     timer: {
         color: 'black',
-        fontSize: 64,
+        fontSize: 48,
         display: 'flex',
         textAlign: 'center',
     },

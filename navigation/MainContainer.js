@@ -5,10 +5,10 @@ import { Home, Profile, Settings, Tabs, Login, Register, Notifications, Agenda, 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import DrawerContent from './DrawerContent';
+import Onboarding from '../screens/Onboarding/Onboarding';
 
 const DrawerNav = () => {
   const Drawer = createDrawerNavigator();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
     <Drawer.Navigator
@@ -21,8 +21,6 @@ const DrawerNav = () => {
       <Drawer.Screen name="Profile" component={Profile} />
       <Drawer.Screen name="Calendar" component={Agenda} />
 
-      <Drawer.Screen name="Login" component={Login} />
-      <Drawer.Screen name="Register" component={Register} />
       <Drawer.Screen name="Settings" component={Settings} />
     </Drawer.Navigator>
   );
@@ -31,24 +29,6 @@ const DrawerNav = () => {
 const MainContainer = () => {
 
   const navigation = useNavigation();
-
-  useEffect(() => {
-    const checkLoginStatus = async () => {
-      const token = await AsyncStorage.getItem('tokenKey');
-      setIsLoggedIn(!!token);
-    };
-
-    checkLoginStatus();
-  }, []);
-
-  const handleLogout = async () => {
-    await AsyncStorage.removeItem('tokenKey');
-    setIsLoggedIn(false);
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Login' }],
-    });
-  };
 
   return (
     <DrawerNav></DrawerNav>

@@ -1,13 +1,17 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, TextInput, View } from 'react-native';
+import React from 'react';
 
-const CustomTextInput = ({text, val, setVal}) => {
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+const CustomTextInput = ({text, val, setVal, placeholder, isSecured}) => {
     return (
         <View>
-            <Text style={styles.title}>{text}</Text>
             <TextInput
                 style={styles.input}
                 value={val}
+                placeholder={placeholder}
+                placeholderTextColor={'gray'}
+                secureTextEntry={isSecured}
                 onChangeText={value => setVal(value)}
             />
         </View>
