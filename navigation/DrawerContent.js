@@ -18,6 +18,7 @@ const DrawerList = [
     { icon: 'calendar-clock', label: 'Calendar', navigateTo: 'Calendar' },
     { icon: 'chart-bell-curve-cumulative', label: 'Stats', navigateTo: 'Stats' },
     { icon: 'account-box', label: 'Settings', navigateTo: 'Settings' },
+    { icon: 'trophy', label: 'Leaderboard', navigateTo:'Leaderboard'}
 ];
 
 const SettingsDrawerList = [

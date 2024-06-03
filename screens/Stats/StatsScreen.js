@@ -2,130 +2,87 @@ import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { LineChart } from "react-native-gifted-charts";
 import Header from '../../components/Header';
+import SwitchButton from '../../components/SwitchButton/SwitchButton';
+import Section from '../../components/Section/Section';
+import { Dimensions } from "react-native";
+import { BarChart, ProgressChart } from 'react-native-chart-kit';
 
 const StatsScreen = () => {
-  const data = [
-    {value: 160, date: '1 Apr 2022'},
-    {value: 180, date: '2 Apr 2022'},
-    {value: 190, date: '3 Apr 2022'},
-    {value: 180, date: '4 Apr 2022'},
-    {value: 140, date: '5 Apr 2022'},
-    {value: 145, date: '6 Apr 2022'},
-    {value: 160, date: '7 Apr 2022'},
-    {value: 200, date: '8 Apr 2022'},
-  
-    {value: 220, date: '9 Apr 2022'},
+  const screenWidth = Dimensions.get("window").width;
+
+  const datesDummy = [
     {
-      value: 240,
-      date: '10 Apr 2022',
-      label: '10 Apr',
-      labelTextStyle: {color: 'lightgray', width: 60},
+      id: '1',
+      name: 'Son Ay'
     },
-    {value: 280, date: '11 Apr 2022'},
-    {value: 260, date: '12 Apr 2022'},
-    {value: 340, date: '13 Apr 2022'},
-    {value: 385, date: '14 Apr 2022'},
-    {value: 280, date: '15 Apr 2022'},
-    {value: 390, date: '16 Apr 2022'},
-  
-    {value: 370, date: '17 Apr 2022'},
-    {value: 285, date: '18 Apr 2022'},
-    {value: 295, date: '19 Apr 2022'},
     {
-      value: 300,
-      date: '20 Apr 2022',
-      label: '20 Apr',
-      labelTextStyle: {color: 'lightgray', width: 60},
+      id: '2',
+      name: 'Son 3 Ay'
     },
-    {value: 280, date: '21 Apr 2022'},
-    {value: 295, date: '22 Apr 2022'},
-    {value: 260, date: '23 Apr 2022'},
-    {value: 255, date: '24 Apr 2022'},
-  
-    {value: 190, date: '25 Apr 2022'},
-    {value: 220, date: '26 Apr 2022'},
-    {value: 205, date: '27 Apr 2022'},
-    {value: 230, date: '28 Apr 2022'},
-    {value: 210, date: '29 Apr 2022'},
     {
-      value: 200,
-      date: '30 Apr 2022',
-      label: '30 Apr',
-      labelTextStyle: {color: 'lightgray', width: 60},
+      id: '3',
+      name: 'Son Yıl'
     },
-    {value: 240, date: '1 May 2022'},
-    {value: 250, date: '2 May 2022'},
-    {value: 280, date: '3 May 2022'},
-    {value: 250, date: '4 May 2022'},
-    {value: 210, date: '5 May 2022'},
-  ];
+    {
+      id: '4',
+      name: 'Tüm zamanlar'
+    }
+  ]
+
+  const ringData = {
+    labels: ["Swim", "Bike", "Run"],
+    data: [0.4, 0.6, 0.8]
+  };
+
+  const data = {
+    labels: ["January", "February", "March", "April", "May", "June"],
+    datasets: [
+      {
+        data: [20, 45, 28, 80, 99, 43]
+      }
+    ]
+  };
+
+  const chartConfig = {
+    backgroundGradientFrom: "#1E2923",
+    backgroundGradientFromOpacity: 0,
+    backgroundGradientTo: "#08130D",
+    backgroundGradientToOpacity: 0.5,
+    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+    strokeWidth: 2, // optional, default 3
+    barPercentage: 0.5,
+    useShadowColorFromDataset: false // optional
+  };
   return (
     <ScrollView>
-      <Header></Header>
+      <SwitchButton data={datesDummy} />
 
-      <View
-      style={{
-        paddingVertical: 100,
-        paddingLeft: 20,
-      }}>
-          <LineChart
-          areaChart
+      <Section section={{ id: 1, name: 'Contribution Chart' }}>
+
+      </Section>
+
+      <Section section={{ id: 2, name: 'Bar Chart' }}>
+        <BarChart
           data={data}
-          rotateLabel
-          width={300}
-          hideDataPoints
-          spacing={10}
-          color="#00ff83"
-          thickness={2}
-          startFillColor="rgba(20,105,81,0.3)"
-          endFillColor="rgba(20,85,81,0.01)"
-          startOpacity={0.9}
-          endOpacity={0.2}
-          initialSpacing={0}
-          noOfSections={6}
-          maxValue={600}
-          yAxisColor="white"
-          yAxisThickness={0}
-          rulesType="solid"
-          rulesColor="gray"
-          yAxisTextStyle={{color: 'gray'}}
-          yAxisSide='right'
-          xAxisColor="lightgray"
-          pointerConfig={{
-            pointerStripHeight: 160,
-            pointerStripColor: 'lightgray',
-            pointerStripWidth: 2,
-            pointerColor: 'lightgray',
-            radius: 6,
-            pointerLabelWidth: 100,
-            pointerLabelHeight: 90,
-            activatePointersOnLongPress: true,
-            autoAdjustPointerLabelPosition: false,
-            pointerLabelComponent: items => {
-              return (
-                <View
-                  style={{
-                    height: 90,
-                    width: 100,
-                    justifyContent: 'center',
-                    marginTop: -30,
-                    marginLeft: -40,
-                  }}>
-                  <Text style={{color: 'black', fontSize: 14, marginBottom:6,textAlign:'center'}}>
-                    {items[0].date}
-                  </Text>
-  
-                  <View style={{paddingHorizontal:14,paddingVertical:6, borderRadius:16, backgroundColor:'white'}}>
-                    <Text style={{fontWeight: 'bold',textAlign:'center'}}>
-                      {'$' + items[0].value + '.0'}
-                    </Text>
-                  </View>
-                </View>
-              );
-            },
-          }}
+          width={screenWidth}
+          height={220}
+          yAxisLabel="$"
+          chartConfig={chartConfig}
+          verticalLabelRotation={30}
         />
-      </View>
+      </Section>
+
+      <Section section={{ id: 3, name: 'Progress Ring' }}>
+        <ProgressChart
+          data={ringData}
+          width={screenWidth}
+          height={220}
+          strokeWidth={16}
+          radius={32}
+          chartConfig={chartConfig}
+          hideLegend={false}
+        />
+      </Section>
     </ScrollView>
   );
 };

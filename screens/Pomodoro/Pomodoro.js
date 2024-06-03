@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, ImageBackground } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Header from '../../components/Header';
@@ -7,6 +7,9 @@ import { GetWithAuth, GetWithoutAuth } from '../../services/HttpService';
 import CheckBox from '@react-native-community/checkbox';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
+import wallpaper from '../../assets/img/wallpaper.jpg';
+
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const PomodoroScreen = () => {
     const TimerStatus = [
@@ -98,51 +101,89 @@ const PomodoroScreen = () => {
     };
 
     return (
-        <View>
-            <View style={styles.timerContainer}>
-                <ScrollView horizontal contentContainerStyle={styles.timerModesContainer}>
-                    {
-                        TimerStatus.map((s) => (
-                            <TouchableOpacity
-                                key={s.id}
-                                onPress={() => changeActiveStatus(s)}
-                                style={styles.button}
-                            >
-                                <Text style={styles.buttonText}>{s.status}</Text>
-                            </TouchableOpacity>
-                        ))
-                    }
-                </ScrollView>
+        <View style={styles.mainContainer}>
+            <ImageBackground source={wallpaper} resizeMode="cover" style={styles.image}>
+                <View style={styles.timerContainer}>
+                    <CountdownCircleTimer
+                        isPlaying={isRunning}
+                        duration={status.duration}
+                        key={timerReset}
+                        initialRemainingTime={status.duration}
+                        size={320}
+                        colors={['#3ef053', '#e1f03e', '#f03e3e']}
+                        strokeWidth={25}
+                        colorsTime={[status.duration, 2 * (status.duration) / 3, 0]}
+                    >
+                        {() => <>
+                            <Text style={styles.timer}>{displayTime}</Text>
+                            <Text style={styles.streak}>{'#' + dailyStreak}</Text>
+                        </>}
+                    </CountdownCircleTimer>
 
-                <CountdownCircleTimer
-                    isPlaying={isRunning}
-                    duration={status.duration}
-                    key={timerReset}
-                    initialRemainingTime={status.duration}
-                    colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-                    colorsTime={[status.duration - 10,status.duration - 20 , status.duration - 30, status.duration - 40]}
-                >
-                    {() => <>
-                        <Text style={styles.timer}>{displayTime}</Text>
-                        <Text style={styles.streak}>{'#' + dailyStreak}</Text>
-                    </>}
-                </CountdownCircleTimer>
+                    <View style={styles.buttonContainer}>
+                        {
+                            !isRunning && counter == status.duration ?
 
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity onPress={handleRestart} style={styles.button}>
-                        <Text style={styles.buttonText}>Sıfırla</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={handleStop} style={styles.button}>
-                        <Text style={styles.buttonText}>
-                            {isRunning ? 'Durdur' : 'Başlat'}
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={handleForward} style={styles.button}>
-                        <Text style={styles.buttonText}>İleri Sar</Text>
-                    </TouchableOpacity>
+                                <>
+                                    <TouchableOpacity onPress={handleStop} style={styles.button}>
+                                        <MaterialCommunityIcons name={'play'} color={'black'} size={30}></MaterialCommunityIcons>
+                                        <Text style={styles.buttonText}>
+                                            Odaklanmaya Başlayın
+                                        </Text>
+                                    </TouchableOpacity>
+                                </>
+                                :
+                                <>
+                                    {isRunning
+                                        ?
+                                        <>
+                                            <TouchableOpacity onPress={handleStop} style={styles.button}>
+                                                <MaterialCommunityIcons name={'pause'} color={'black'} size={30}></MaterialCommunityIcons>
+                                                <Text style={styles.buttonText}>
+                                                    Durdur
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </>
+                                        :
+                                        <View style={{flexDirection : 'row'}}>
+                                            <TouchableOpacity onPress={handleStop} style={styles.button}>
+                                                <MaterialCommunityIcons name={'play'} color={'black'} size={30}></MaterialCommunityIcons>
+                                                <Text style={styles.buttonText}>
+                                                    Devam
+                                                </Text>
+                                            </TouchableOpacity>
+
+                                            <TouchableOpacity onPress={handleForward} style={styles.button}>
+                                                <MaterialCommunityIcons name={'fast-forward'} color={'black'} size={30}></MaterialCommunityIcons>
+                                                <Text style={styles.buttonText}>
+                                                    Bitir
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>}
+                                </>
+
+                        }
+
+                    </View>
                 </View>
-            </View>
-            <Text style={styles.title}>Bugünkü bitirmeniz gereken görevleriniz:</Text>
+
+                <View style={styles.modesContainer}>
+                    <View style={styles.mode}>
+                        <MaterialCommunityIcons style={styles.modeIcons} name={'application'} color={'black'} size={28}></MaterialCommunityIcons>
+                        <Text>Tema</Text>
+                    </View>
+
+                    <View style={styles.mode}>
+                        <MaterialCommunityIcons style={styles.modeIcons} name={'clock-edit'} color={'black'} size={28}></MaterialCommunityIcons>
+                        <Text>Zamanlayıcı</Text>
+                    </View>
+
+                    <View style={styles.mode}>
+                        <MaterialCommunityIcons style={styles.modeIcons} name={'playlist-music'} color={'black'} size={28}></MaterialCommunityIcons>
+                        <Text>Arkaplan Sesi</Text>
+                    </View>
+                </View>
+            </ImageBackground>
         </View>
     );
 };
@@ -150,8 +191,14 @@ const PomodoroScreen = () => {
 export default PomodoroScreen;
 
 const styles = StyleSheet.create({
+    mainContainer: {
+        flex: 1,
+    },
+    image: {
+        flex: 1,
+        justifyContent: 'space-between'
+    },
     timerModesContainer: {
-        display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
@@ -159,40 +206,59 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     timer: {
-        color: 'black',
-        fontSize: 48,
-        display: 'flex',
+        color: 'white',
+        fontSize: 72,
+        fontWeight: '100',
         textAlign: 'center',
     },
     timerContainer: {
-        display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        marginTop: 25
     },
     buttonContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        backgroundColor: 'black',
         borderColor: 'black',
         borderRadius: 5,
+        alignItems: 'center',
+        marginTop: 50
     },
     button: {
         fontSize: 20,
-        padding: 10,
+        paddingHorizontal: 20,
+        paddingVertical: 12,
         margin: 5,
+        backgroundColor: 'white',
+        borderRadius: 25,
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     buttonText: {
         fontSize: 20,
         textAlign: 'center',
-        color: 'white'
+        color: 'black',
+        fontWeight: '600',
+        marginLeft: 5
     },
     streak: {
         color: 'gray'
     },
     title: {
-        'color': 'black',
-        'textAlign': 'center',
-        'fontSize': 18,
-        'marginVertical': 20
+        color: 'black',
+        textAlign: 'center',
+        fontSize: 18,
+        marginVertical: 20
+    },
+    modesContainer: {
+        marginHorizontal: 20,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginBottom: 25
+    },
+    mode: {
+        alignItems: 'center',
+        width: '33%'
+    },
+    modeIcons: {
+        color: 'white'
     }
 });
