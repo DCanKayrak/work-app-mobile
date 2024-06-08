@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, ImageBackground } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, ScrollView, ImageBackground } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { GetWithAuth, GetWithoutAuth } from '../../services/HttpService';
+import { GetWithAuth, GetWithoutAuth, PostWithAuth } from '../../services/HttpService';
 import { Dropdown } from 'react-native-element-dropdown';
 
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 import wallpaper from '../../assets/img/wallpaper.jpg';
 import { TimerStatus } from './TimerConfig';
+import { Modal, Portal, Text, Button, PaperProvider } from 'react-native-paper';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -23,6 +24,15 @@ const PomodoroScreen = () => {
 
     const [value, setValue] = useState(null);
     const [isFocus, setIsFocus] = useState(false);
+
+    const [duration, setDuration] = useState(0);
+    const [collections, setCollections] = useState([]);
+
+    const [visible, setVisible] = React.useState(false);
+
+    const showModal = () => setVisible(true);
+    const hideModal = () => setVisible(false);
+    const containerStyle = { backgroundColor: 'white', padding: 20 };
 
     const calculateDisplayTime = () => {
         const minutes = Math.floor(counter / 60);
@@ -43,6 +53,7 @@ const PomodoroScreen = () => {
     };
 
     const handleForward = () => {
+        handlePomodoroPostRequest();
         setCounter(0);
     };
 
@@ -52,12 +63,43 @@ const PomodoroScreen = () => {
         }
     }
 
-    useEffect(() => {
-        AsyncStorage.getItem('dailyStreak').then(value => setDailyStreak(value));
+    const handlePomodoroPostRequest = () => {
+        let totalPomodoroDuration = (status.duration - counter) / 60;
+        setDuration(totalPomodoroDuration)
+        PostWithAuth('/api/Pomodoro',
+            {
+                duration: duration
+            }
+        )
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.success) {
+                    console.log('Pomodoro Oluşturuldu')
+                }
+                else {
+                    console.log('Pomodoro post hata!')
+                }
+            })
+    }
 
+    const handleGetCollections = () => {
+        GetWithAuth("/api/Task/Collections").then((res) => res.json())
+            .then((res) => {
+                if (res.success) {
+                    console.log("Başarılı - Collections");
+                    setCollections(res.data);
+                }
+            }).catch(error => {
+                console.log("Error fetching collections:", error);
+            });
+    };
+
+    useEffect(() => {
         if (dailyStreak == null) {
             AsyncStorage.setItem('dailyStreak', Number(0));
         }
+        AsyncStorage.getItem('dailyStreak').then(value => setDailyStreak(value));
+        handleGetCollections();
     }, [])
 
     useEffect(() => {
@@ -97,22 +139,10 @@ const PomodoroScreen = () => {
     const renderItem = item => {
         return (
             <View style={styles.item}>
-                <Text style={styles.textItem}>{item.label}</Text>
-
+                <Text style={styles.textItem}>{item.title}</Text>
             </View>
         );
     };
-
-    const data = [
-        { label: 'Item 1', value: '1' },
-        { label: 'Item 2', value: '2' },
-        { label: 'Item 3', value: '3' },
-        { label: 'Item 4', value: '4' },
-        { label: 'Item 5', value: '5' },
-        { label: 'Item 6', value: '6' },
-        { label: 'Item 7', value: '7' },
-        { label: 'Item 8', value: '8' },
-    ];
 
     return (
         <View style={styles.mainContainer}>
@@ -126,11 +156,11 @@ const PomodoroScreen = () => {
                             selectedTextStyle={styles.selectedTextStyle}
                             inputSearchStyle={styles.inputSearchStyle}
                             iconStyle={styles.iconStyle}
-                            data={data}
+                            data={collections}
                             search
                             maxHeight={300}
-                            labelField="label"
-                            valueField="value"
+                            labelField="title"
+                            valueField="id"
                             placeholder={!isFocus ? 'Select item' : '...'}
                             searchPlaceholder="Search..."
                             value={value}
@@ -213,21 +243,30 @@ const PomodoroScreen = () => {
 
                 <View style={styles.modesContainer}>
                     <View style={styles.mode}>
-                        <MaterialCommunityIcons style={styles.modeIcons} name={'application'} color={'black'} size={28}></MaterialCommunityIcons>
-                        <Text>Tema</Text>
+                        <Button textColor='white' icon="theme-light-dark" mode="text" onPress={() => console.log('Pressed')}>
+                            Theme
+                        </Button>
                     </View>
 
                     <View style={styles.mode}>
-                        <MaterialCommunityIcons style={styles.modeIcons} name={'clock-edit'} color={'black'} size={28}></MaterialCommunityIcons>
-                        <Text>Zamanlayıcı</Text>
+                        <Button textColor='white' icon="camera-timer" mode="text" onPress={() => console.log('Pressed')}>
+                            Timer
+                        </Button>
                     </View>
 
                     <View style={styles.mode}>
-                        <MaterialCommunityIcons style={styles.modeIcons} name={'playlist-music'} color={'black'} size={28}></MaterialCommunityIcons>
-                        <Text>Arkaplan Sesi</Text>
+                        <Button textColor='white' icon="music" mode="text" onPress={() => showModal()}>
+                            Sounds
+                        </Button>
                     </View>
                 </View>
             </ImageBackground>
+
+            <Portal>
+                <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
+                    <Text>Example Modal.  Click outside this area to dismiss.</Text>
+                </Modal>
+            </Portal>
         </View>
     );
 };

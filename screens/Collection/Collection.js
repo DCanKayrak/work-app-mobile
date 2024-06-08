@@ -166,6 +166,7 @@ const Collection = () => {
                             placeholder='ex: My Collection'
                             value={collectionName}
                             onChangeText={text => setCollectionName(text)}
+                            style={{ marginBottom: 15}}
                         />
 
                         <TextInput

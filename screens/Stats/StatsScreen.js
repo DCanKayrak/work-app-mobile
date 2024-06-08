@@ -10,7 +10,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 const StatsScreen = () => {
 
-  const [value, setValue] = React.useState('walk');
+  const [value, setValue] = React.useState('this');
 
   const datesDummy = [
     {
@@ -35,33 +35,63 @@ const StatsScreen = () => {
     <ScrollView>
       <CustomSegmentedButtons buttons={[
         {
-          icon: 'walk',
-          value: 'walk',
-          label: 'Bu ay',
+          icon: 'calendar-range',
+          value: 'this',
+          label: 'This Month',
         },
         {
-          icon: 'walk',
-          value: 'train',
-          label: 'Son 6 Ay',
+          icon: 'calendar-range',
+          value: 'six',
+          label: 'Last 6 Month',
         },
         {
-          icon: 'walk',
-          value: 'drive',
-          label: 'Tüm zamanlar',
+          icon: 'calendar-range',
+          value: 'all',
+          label: 'All Times',
         },
       ]} value={value} setValue={setValue}></CustomSegmentedButtons>
 
-      <Section section={{ id: 4, name: '' }}>
-        <View style={styles.achievementContainer}>
-          <View>
-            <MaterialCommunityIcons name={'star-four-points'} color={'black'} size={30} />
+      <View style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 1
+      }}>
+        <View horizontal style={{
+          marginHorizontal: 15,
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+        }}>
+          <View style={styles.achievementContainer}>
+            <View>
+              <MaterialCommunityIcons name={'star-four-points'} color={'black'} size={30} />
+            </View>
+            <View style={{ alignItems: 'flex-end' }}>
+              <Text style={{ color: 'black', fontSize: 18 }}>18000</Text>
+              <Text style={styles.achievement}>Lig Puanı</Text>
+            </View>
           </View>
-          <View style={{ alignItems: 'flex-end' }}>
-            <Text style={{ color: 'black', fontSize: 18 }}>18000</Text>
-            <Text style={styles.achievement}>Lig Puanı</Text>
+
+          <View style={styles.achievementContainer}>
+            <View>
+              <MaterialCommunityIcons name={'star-four-points'} color={'black'} size={30} />
+            </View>
+            <View style={{ alignItems: 'flex-end' }}>
+              <Text style={{ color: 'black', fontSize: 18 }}>18000</Text>
+              <Text style={styles.achievement}>Lig Puanı</Text>
+            </View>
+          </View>
+
+          <View style={styles.achievementContainer}>
+            <View>
+              <MaterialCommunityIcons name={'star-four-points'} color={'black'} size={30} />
+            </View>
+            <View style={{ alignItems: 'flex-end' }}>
+              <Text style={{ color: 'black', fontSize: 18 }}>18000</Text>
+              <Text style={styles.achievement}>Lig Puanı</Text>
+            </View>
           </View>
         </View>
-      </Section>
+      </View>
 
       <Section section={{ id: 1, name: 'Contribution Chart' }}>
         <CustomContributionChart></CustomContributionChart>
@@ -96,18 +126,15 @@ const styles = StyleSheet.create({
   },
 
   achievementContainer: {
-    width: 150,
+    width: '45%',
     margin: 5,
     padding: 20,
-    borderWidth: 0.5,
-    borderColor: 'gray',
+    borderWidth: 1,
+    borderColor: 'blue',
     borderRadius: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
     paddingHorizontal: 10
   },
   achievement: {
-    color: 'gray'
+    color: 'gray',
   },
 });

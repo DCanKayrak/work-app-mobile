@@ -1,44 +1,17 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View, Text, ScrollView } from 'react-native';
 import { DataTable, SegmentedButtons } from 'react-native-paper';
 import CustomSegmentedButtons from '../../components/CustomSegmentedButtons/CustomSegmentedButtons';
 
-const usersDummy = [
-    {
-        id: '1',
-        name: 'Danyal',
-        score: 10000
-    },
-    {
-        id: '2',
-        name: 'Danyal',
-        score: 10000
-    },
-    {
-        id: '3',
-        name: 'Danyal',
-        score: 10000
-    },
-]
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const datesDummy = [
-    {
-        id: '1',
-        name: 'Son Ay'
-    },
-    {
-        id: '2',
-        name: 'Son 3 Ay'
-    },
-    {
-        id: '3',
-        name: 'Son Yıl'
-    },
-    {
-        id: '4',
-        name: 'Tüm zamanlar'
-    }
-]
+
+import owl1 from '../../assets/img/owls/1.png';
+import owl2 from '../../assets/img/owls/2.png';
+import owl3 from '../../assets/img/owls/3.png';
+import owl4 from '../../assets/img/owls/4.png';
+import owl5 from '../../assets/img/owls/5.png';
+import owl6 from '../../assets/img/owls/6.png';
 
 const Leaderboard = () => {
     const [page, setPage] = useState(0);
@@ -46,6 +19,8 @@ const Leaderboard = () => {
     const [itemsPerPage, onItemsPerPageChange] = useState(numberOfItemsPerPageList[0]);
 
     const [buttonValue, setButtonValue] = useState('');
+
+    const [segmentedButtonsValue, setSegmentedButtonsValue] = useState('walk');
 
     const [items] = useState([
         {
@@ -78,25 +53,69 @@ const Leaderboard = () => {
     const to = Math.min((page + 1) * itemsPerPage, items.length);
 
     return (
-        <View>
-            <View style={{ margin : 15 }}>
-                <CustomSegmentedButtons buttons={[
-                        {
-                            icon: 'walk',
-                            value: 'walk',
-                            label: 'Bu ay',
-                        },
-                        {
-                            icon: 'walk',
-                            value: 'train',
-                            label: 'Son 6 Ay',
-                        },
-                        { 
-                            icon: 'walk',
-                            value: 'drive',
-                            label: 'Tüm zamanlar'
-                        },
-                    ]}></CustomSegmentedButtons>
+        <ScrollView>
+            <View style={{
+                backgroundColor: 'blue',
+                paddingBottom: 50,
+                borderBottomLeftRadius: 15,
+                borderBottomRightRadius: 15
+            }}>
+
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 30 }}>
+                    <View style={[styles.rankItem, { width: '33%', alignItems: 'center' }]}>
+                        <Image source={owl1} style={{ width: '100%', height: 75, objectFit: 'contain' }}></Image>
+                        <Text style={styles.rankText}>Owlet</Text>
+                        <View style={styles.rankScoreContainer}>
+                            <MaterialCommunityIcons name={'trophy'} color={'white'} size={24} />
+                            <Text style={styles.rankScore}>250</Text>
+                        </View>
+                    </View>
+
+                    <View style={[styles.rankItem, { width: '33%', alignItems: 'center' }]}>
+                        <Image source={owl2} style={{ width: '100%', height: 75, objectFit: 'contain' }}></Image>
+                        <Text style={styles.rankText}>Night Observer</Text>
+                        <View style={styles.rankScoreContainer}>
+                            <MaterialCommunityIcons name={'trophy'} color={'white'} size={24} />
+                            <Text style={styles.rankScore}>750</Text>
+                        </View>
+                    </View>
+
+                    <View style={[styles.rankItem, { width: '34%', alignItems: 'center' }]}>
+                        <Image source={owl3} style={{ width: '100%', height: 75, objectFit: 'contain' }}></Image>
+                        <Text style={styles.rankText}>Wisdom Bearer</Text>
+                        <View style={styles.rankScoreContainer}>
+                            <MaterialCommunityIcons name={'trophy'} color={'white'} size={24} />
+                            <Text style={styles.rankScore}>1.500</Text>
+                        </View>
+                    </View>
+
+                    <View style={[styles.rankItem, { width: '33%', alignItems: 'center' }]}>
+                        <Image source={owl4} style={{ width: '100%', height: 75, objectFit: 'contain' }}></Image>
+                        <Text style={styles.rankText}>Forest Sage</Text>
+                        <View style={styles.rankScoreContainer}>
+                            <MaterialCommunityIcons name={'trophy'} color={'white'} size={24} />
+                            <Text style={styles.rankScore}>3.000</Text>
+                        </View>
+                    </View>
+
+                    <View style={[styles.rankItem, { width: '33%', alignItems: 'center' }]}>
+                        <Image source={owl5} style={{ width: '100%', height: 75, objectFit: 'contain' }}></Image>
+                        <Text style={styles.rankText}>Moonlight Guide</Text>
+                        <View style={styles.rankScoreContainer}>
+                            <MaterialCommunityIcons name={'trophy'} color={'white'} size={24} />
+                            <Text style={styles.rankScore}>5.000</Text>
+                        </View>
+                    </View>
+
+                    <View style={[styles.rankItem, { width: '34%', alignItems: 'center' }]}>
+                        <Image source={owl6} style={{ width: '100%', height: 75, objectFit: 'contain' }}></Image>
+                        <Text style={styles.rankText}>Master of Wisdom</Text>
+                        <View style={styles.rankScoreContainer}>
+                            <MaterialCommunityIcons name={'trophy'} color={'white'} size={24} />
+                            <Text style={styles.rankScore}>10.000</Text>
+                        </View>
+                    </View>
+                </View>
             </View>
             <DataTable>
                 <DataTable.Header>
@@ -125,7 +144,7 @@ const Leaderboard = () => {
                     selectPageDropdownLabel={'Rows per page'}
                 />
             </DataTable>
-        </View>
+        </ScrollView>
     )
 }
 
@@ -138,4 +157,26 @@ const styles = StyleSheet.create({
     cellText: {
         color: 'black', // Hücre içeriği yazı rengini siyah yap
     },
+
+    rankItem: {
+        marginTop: 15,
+        justifyContent: 'space-around'
+    },
+
+    rankText: {
+        color: 'white',
+        fontSize: 20,
+        fontWeight: '600',
+        textAlign: 'center'
+    },
+    rankScoreContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 5
+    },
+    rankScore: {
+        color: 'white',
+        fontSize: 18,
+        marginLeft: 5
+    }
 });

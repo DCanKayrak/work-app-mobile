@@ -7,6 +7,9 @@ import { Searchbar, FAB, Portal } from 'react-native-paper';
 import homeBg from '../../assets/img/home-bg.png';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import banner1 from '../../assets/img/home/1.png';
+import banner2 from '../../assets/img/home/2.png';
+import banner3 from '../../assets/img/home/3.png';
 
 const HomeScreen = () => {
 
@@ -37,68 +40,32 @@ const HomeScreen = () => {
         value={searchQuery}
       />
 
-      <View style={styles.section}>
-        <View style={styles.sectionTitleContainer}>
-          <Text style={styles.sectionTitle}>Son Çalışmalarınız</Text>
-          <TouchableOpacity>
-            <Text style={styles.sectionTitle}>View More</Text>
-          </TouchableOpacity>
+      <ScrollView style={{
+        marginTop: 15,
+      }}>
+        <View>
+          <View style={{ width: '100%', borderRadius: 15 }}>
+            <Image
+              source={banner1}
+              style={{ width: '100%', height: 150, borderRadius: 15 }}
+            />
+          </View>
+
+          <View style={{ width: '100%', marginTop: 15, borderRadius: 15 }}>
+            <Image
+              source={banner2}
+              style={{ width: '100%', height: 150, borderRadius: 15 }}
+            />
+          </View>
+
+          <View style={{ width: '100%', marginTop: 15, borderRadius: 15 }}>
+            <Image
+              source={banner3}
+              style={{ width: '100%', height: 150, borderRadius: 15 }}
+            />
+          </View>
         </View>
-
-
-        <ScrollView horizontal={true}>
-          <View style={styles.achievementContainer}>
-            <View>
-              <MaterialCommunityIcons name={'star-four-points'} color={'black'} size={30} />
-            </View>
-            <View style={{ alignItems: 'flex-end' }}>
-              <Text style={{ color: 'black', fontSize: 18 }}>18000</Text>
-              <Text style={styles.achievement}>Lig Puanı</Text>
-            </View>
-          </View>
-
-          <View style={styles.achievementContainer}>
-            <View>
-              <MaterialCommunityIcons name={'star-four-points'} color={'black'} size={30} />
-            </View>
-            <View style={{ alignItems: 'flex-end' }}>
-              <Text style={{ color: 'black', fontSize: 18 }}>18000</Text>
-              <Text style={styles.achievement}>Lig Puanı</Text>
-            </View>
-          </View>
-
-          <View style={styles.achievementContainer}>
-            <View>
-              <MaterialCommunityIcons name={'star-four-points'} color={'black'} size={30} />
-            </View>
-            <View style={{ alignItems: 'flex-end' }}>
-              <Text style={{ color: 'black', fontSize: 18 }}>18000</Text>
-              <Text style={styles.achievement}>Lig Puanı</Text>
-            </View>
-          </View>
-
-          <View style={styles.achievementContainer}>
-            <View>
-              <MaterialCommunityIcons name={'star-four-points'} color={'black'} size={30} />
-            </View>
-            <View style={{ alignItems: 'flex-end' }}>
-              <Text style={{ color: 'black', fontSize: 18 }}>18000</Text>
-              <Text style={styles.achievement}>Lig Puanı</Text>
-            </View>
-          </View>
-
-          <View style={styles.achievementContainer}>
-            <View>
-              <MaterialCommunityIcons name={'star-four-points'} color={'black'} size={30} />
-            </View>
-            <View style={{ alignItems: 'flex-end' }}>
-              <Text style={{ color: 'black', fontSize: 18 }}>18000</Text>
-              <Text style={styles.achievement}>Lig Puanı</Text>
-            </View>
-          </View>
-          
-        </ScrollView>
-      </View>
+      </ScrollView>
     </ScrollView>
   );
 };

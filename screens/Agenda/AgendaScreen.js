@@ -40,25 +40,13 @@ const AgendaScreen = () => {
     return date.toISOString().split('T')[0];
   }
 
-  const renderItem = (item) => {
-    return (
-      <View style={styles.agendaItemContainer}>
-        <TextInput style={styles.textInput} placeholder='Yeni Görev'></TextInput>
-        <Button title='+'></Button>
-      </View>
-    );
-  }
 
   return (
     <View style={{ flex: 1 }}>
       <Agenda
         items={items}
-        loadItemsForMonth={loadItems}
         selected={new Date()}
-        renderItem={renderItem}
       />
-      <Button title='Task Ekle'>
-      </Button>
     </View>
   );
 }
@@ -66,15 +54,5 @@ const AgendaScreen = () => {
 export default AgendaScreen
 
 const styles = StyleSheet.create({
-  agendaItemContainer: {
-    'flexDirection': 'row'
-  },
-  btn: {
-    'width': 25 + 'px'
-  },
-  textInput: {
-    'color': 'black',
-    'flex': 1,
-    'marginRight': 5
-  }
+
 })

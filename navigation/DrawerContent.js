@@ -13,7 +13,7 @@ import { AuthContext } from '../contexts/AuthContext';
 const DrawerList = [
     { icon: 'home-outline', label: 'Home', navigateTo: 'Home' },
     { icon: 'clock-outline', label: 'Pomodoro', navigateTo: 'Pomodoro' },
-    { icon: 'trophy', label: 'Collections', navigateTo: 'Collections'},
+    { icon: 'rhombus-split', label: 'Collections', navigateTo: 'Collections'},
     { icon: 'bell-badge-outline', label: 'Notifications', navigateTo: 'Notifications' },
     { icon: 'trophy', label: 'Leaderboard', navigateTo:'Leaderboard'},
     { icon: 'calendar-clock', label: 'Calendar', navigateTo: 'Calendar' },
