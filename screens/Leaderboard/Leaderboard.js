@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
-import SwitchButton from '../../components/SwitchButton/SwitchButton'
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { DataTable, SegmentedButtons } from 'react-native-paper';
+import CustomSegmentedButtons from '../../components/CustomSegmentedButtons/CustomSegmentedButtons';
 
 const usersDummy = [
     {
@@ -22,101 +23,119 @@ const usersDummy = [
 
 const datesDummy = [
     {
-        id : '1',
-        name : 'Son Ay'
+        id: '1',
+        name: 'Son Ay'
     },
     {
-        id : '2',
-        name : 'Son 3 Ay'
+        id: '2',
+        name: 'Son 3 Ay'
     },
     {
-        id : '3',
-        name : 'Son Yıl'
+        id: '3',
+        name: 'Son Yıl'
     },
     {
-        id : '4',
-        name : 'Tüm zamanlar'
+        id: '4',
+        name: 'Tüm zamanlar'
     }
 ]
 
 const Leaderboard = () => {
-    const [activeDate, setActiveDate] = useState(0);
+    const [page, setPage] = useState(0);
+    const [numberOfItemsPerPageList] = useState([2, 3, 4]);
+    const [itemsPerPage, onItemsPerPageChange] = useState(numberOfItemsPerPageList[0]);
 
-    const handleActiveDate = (id) => {
-        setActiveDate(id);
-    }
+    const [buttonValue, setButtonValue] = useState('');
 
-    const LeaderboardUser = ({ item, index }) => (
-        <View style={styles.userContainer}>
-            <Text style={styles.userName}>#{index + 1}</Text>
-            <Text style={styles.userName}>{item.name}</Text>
-            <Text style={styles.userScore}>{item.score}</Text>
-        </View>
-    );
+    const [items] = useState([
+        {
+            key: 1,
+            name: 'Cupcake',
+            calories: 356,
+            fat: 16,
+        },
+        {
+            key: 2,
+            name: 'Eclair',
+            calories: 262,
+            fat: 16,
+        },
+        {
+            key: 3,
+            name: 'Frozen yogurt',
+            calories: 159,
+            fat: 6,
+        },
+        {
+            key: 4,
+            name: 'Gingerbread',
+            calories: 305,
+            fat: 3.7,
+        },
+    ]);
+
+    const from = page * itemsPerPage;
+    const to = Math.min((page + 1) * itemsPerPage, items.length);
 
     return (
-        <View style={styles.container}>
-            <SwitchButton
-            data={datesDummy}></SwitchButton>
-
-            <View style={styles.listContainer}>
-                <FlatList
-                    data={usersDummy}
-                    renderItem={({ item, index }) => <LeaderboardUser item={item} index={index} />}
-                    keyExtractor={item => item.id}
-                />
+        <View>
+            <View style={{ margin : 15 }}>
+                <CustomSegmentedButtons buttons={[
+                        {
+                            icon: 'walk',
+                            value: 'walk',
+                            label: 'Bu ay',
+                        },
+                        {
+                            icon: 'walk',
+                            value: 'train',
+                            label: 'Son 6 Ay',
+                        },
+                        { 
+                            icon: 'walk',
+                            value: 'drive',
+                            label: 'Tüm zamanlar'
+                        },
+                    ]}></CustomSegmentedButtons>
             </View>
+            <DataTable>
+                <DataTable.Header>
+                    <DataTable.Title style={styles.headerText}>Dessert</DataTable.Title>
+                    <DataTable.Title numeric style={styles.headerText}>Calories</DataTable.Title>
+                    <DataTable.Title numeric style={styles.headerText}>Fat</DataTable.Title>
+                </DataTable.Header>
+
+                {items.slice(from, to).map((item) => (
+                    <DataTable.Row key={item.key}>
+                        <DataTable.Cell style={styles.cellText}>{item.name}</DataTable.Cell>
+                        <DataTable.Cell numeric style={styles.cellText}>{item.calories}</DataTable.Cell>
+                        <DataTable.Cell numeric style={styles.cellText}>{item.fat}</DataTable.Cell>
+                    </DataTable.Row>
+                ))}
+
+                <DataTable.Pagination
+                    page={page}
+                    numberOfPages={Math.ceil(items.length / itemsPerPage)}
+                    onPageChange={(page) => setPage(page)}
+                    label={`${from + 1}-${to} of ${items.length}`}
+                    numberOfItemsPerPageList={numberOfItemsPerPageList}
+                    numberOfItemsPerPage={itemsPerPage}
+                    onItemsPerPageChange={onItemsPerPageChange}
+                    showFastPaginationControls
+                    selectPageDropdownLabel={'Rows per page'}
+                />
+            </DataTable>
         </View>
     )
 }
 
-export default Leaderboard
+export default Leaderboard;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
+    headerText: {
+        color: 'black', // Başlık yazı rengini siyah yap
     },
-    degreeContainer: {
-        height: 300,
-        backgroundColor: 'blue',
-        borderBottomRightRadius: 30,
-        borderBottomLeftRadius: 30,
+    cellText: {
+        color: 'black', // Hücre içeriği yazı rengini siyah yap
     },
-    dateSelector: {
-        flexDirection: 'row',
-        padding: 5,
-        marginTop: 20,
-        justifyContent: 'space-around',
-        alignItems: 'center',
-    },
-    date: {
-        color: 'white',
-        fontSize: 15
-    },
-    activeDate: {
-        backgroundColor: 'white',
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        borderRadius: 15,
-        color: 'blue'
-    },
-    listContainer: {
-        flex: 1,
-        padding: 10,
-    },
-    userContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-    },
-    userName: {
-        color: 'black',
-        fontSize: 16,
-    },
-    userScore: {
-        color: 'black',
-        fontSize: 16,
-    }
-})
+});

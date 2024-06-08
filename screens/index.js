@@ -9,6 +9,7 @@ export {default as Pomodoro} from './Pomodoro/Pomodoro';
 export {default as Onboarding} from './Onboarding/Onboarding';
 export {default as Followers} from './Followers/Followers';
 export {default as Leaderboard} from './Leaderboard/Leaderboard';
+export {default as Collection} from './Collection/Collection';
 
 export {default as Login} from './Login/Login';
 export {default as Register} from './Register/Register';

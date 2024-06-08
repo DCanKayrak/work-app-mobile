@@ -1,14 +1,14 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { LineChart } from "react-native-gifted-charts";
-import Header from '../../components/Header';
-import SwitchButton from '../../components/SwitchButton/SwitchButton';
 import Section from '../../components/Section/Section';
-import { Dimensions } from "react-native";
-import { BarChart, ProgressChart } from 'react-native-chart-kit';
+import CustomContributionChart from '../../components/CustomContributionChart/CustomContributionChart';
+import CustomBarChart from '../../components/CustomBarChart/CustomBarChart';
+import CustomProcessRing from '../../components/CustomProcessRing/CustomProcessRing';
+import CustomSegmentedButtons from '../../components/CustomSegmentedButtons/CustomSegmentedButtons';
 
 const StatsScreen = () => {
-  const screenWidth = Dimensions.get("window").width;
+
+  const [value, setValue] = React.useState('walk');
 
   const datesDummy = [
     {
@@ -29,59 +29,40 @@ const StatsScreen = () => {
     }
   ]
 
-  const ringData = {
-    labels: ["Swim", "Bike", "Run"],
-    data: [0.4, 0.6, 0.8]
-  };
-
-  const data = {
-    labels: ["January", "February", "March", "April", "May", "June"],
-    datasets: [
-      {
-        data: [20, 45, 28, 80, 99, 43]
-      }
-    ]
-  };
-
-  const chartConfig = {
-    backgroundGradientFrom: "#1E2923",
-    backgroundGradientFromOpacity: 0,
-    backgroundGradientTo: "#08130D",
-    backgroundGradientToOpacity: 0.5,
-    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-    strokeWidth: 2, // optional, default 3
-    barPercentage: 0.5,
-    useShadowColorFromDataset: false // optional
-  };
   return (
     <ScrollView>
-      <SwitchButton data={datesDummy} />
+      <CustomSegmentedButtons buttons={[
+        {
+          icon: 'walk',
+          value: 'walk',
+          label: 'Bu ay',
+        },
+        {
+          icon: 'walk',
+          value: 'train',
+          label: 'Son 6 Ay',
+        },
+        {
+          icon: 'walk',
+          value: 'drive',
+          label: 'Tüm zamanlar',
+        },
+      ]} value={value} setValue={setValue}></CustomSegmentedButtons>
+
+      <Section section={{ id: 4, name: '' }}>
+        <CustomContributionChart></CustomContributionChart>
+      </Section>
 
       <Section section={{ id: 1, name: 'Contribution Chart' }}>
-
+        <CustomContributionChart></CustomContributionChart>
       </Section>
 
       <Section section={{ id: 2, name: 'Bar Chart' }}>
-        <BarChart
-          data={data}
-          width={screenWidth}
-          height={220}
-          yAxisLabel="$"
-          chartConfig={chartConfig}
-          verticalLabelRotation={30}
-        />
+        <CustomBarChart></CustomBarChart>
       </Section>
 
       <Section section={{ id: 3, name: 'Progress Ring' }}>
-        <ProgressChart
-          data={ringData}
-          width={screenWidth}
-          height={220}
-          strokeWidth={16}
-          radius={32}
-          chartConfig={chartConfig}
-          hideLegend={false}
-        />
+        <CustomProcessRing></CustomProcessRing>
       </Section>
     </ScrollView>
   );

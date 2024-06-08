@@ -18,7 +18,8 @@ const DrawerList = [
     { icon: 'calendar-clock', label: 'Calendar', navigateTo: 'Calendar' },
     { icon: 'chart-bell-curve-cumulative', label: 'Stats', navigateTo: 'Stats' },
     { icon: 'account-box', label: 'Settings', navigateTo: 'Settings' },
-    { icon: 'trophy', label: 'Leaderboard', navigateTo:'Leaderboard'}
+    { icon: 'trophy', label: 'Leaderboard', navigateTo:'Leaderboard'},
+    { icon: 'trophy', label: 'Collections', navigateTo: 'Collections'}
 ];
 
 const SettingsDrawerList = [
@@ -56,6 +57,35 @@ function DrawerContent(props) {
     const [user, setUser] = useState({});
 
     const {userToken, logout} = useContext(AuthContext);
+    
+    const handleGetNotifications = async () => {
+        console.log(userToken)
+        let token = "Bearer " + userToken
+        console.log(token)
+        await fetch("http://10.0.2.2:5290/api/User/authUser", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token,
+            },
+        }).then((res) => res.json())
+        .then((res) => {
+            if (res.success) {
+                console.log("Başarılı")
+            }
+            console.log("Başarısız - DrawerContent")
+            console.log(res)
+    });
+    };
+
+    const GetUser =  async () => {
+        return await AsyncStorage.getItem('userToken');
+    }
+
+    useEffect(() => {
+        handleGetNotifications();
+        console.log(GetUser().then((token) => setUser(token)))
+    })
 
     return (
         <View style={{ flex: 1 }}>

@@ -2,36 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, ImageBackground } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Header from '../../components/Header';
 import { GetWithAuth, GetWithoutAuth } from '../../services/HttpService';
-import CheckBox from '@react-native-community/checkbox';
-import CircularProgress from 'react-native-circular-progress-indicator';
+import { Dropdown } from 'react-native-element-dropdown';
+
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 import wallpaper from '../../assets/img/wallpaper.jpg';
+import { TimerStatus } from './TimerConfig';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const PomodoroScreen = () => {
-    const TimerStatus = [
-        {
-            id: 1,
-            status: 'Pomodoro',
-            duration: 1500,
-        },
-
-        {
-            id: 2,
-            status: 'ShortBreak',
-            duration: 300,
-        },
-
-        {
-            id: 3,
-            status: 'LongBreak',
-            duration: 600,
-        },
-    ];
-
     const [dailyStreak, setDailyStreak] = useState(0);
     const [status, setStatus] = useState(TimerStatus[0]);
 
@@ -40,6 +20,9 @@ const PomodoroScreen = () => {
     const [timerReset, setTimerReset] = useState(false);
 
     const [isRunning, setIsRunning] = useState(false);
+
+    const [value, setValue] = useState(null);
+    const [isFocus, setIsFocus] = useState(false);
 
     const calculateDisplayTime = () => {
         const minutes = Math.floor(counter / 60);
@@ -100,10 +83,71 @@ const PomodoroScreen = () => {
         setIsRunning(!isRunning);
     };
 
+    const renderLabel = () => {
+        if (value || isFocus) {
+            return (
+                <Text style={[styles.label, isFocus && { color: 'white' }]}>
+                    Görev Seçiniz
+                </Text>
+            );
+        }
+        return null;
+    };
+
+    const renderItem = item => {
+        return (
+            <View style={styles.item}>
+                <Text style={styles.textItem}>{item.label}</Text>
+
+            </View>
+        );
+    };
+
+    const data = [
+        { label: 'Item 1', value: '1' },
+        { label: 'Item 2', value: '2' },
+        { label: 'Item 3', value: '3' },
+        { label: 'Item 4', value: '4' },
+        { label: 'Item 5', value: '5' },
+        { label: 'Item 6', value: '6' },
+        { label: 'Item 7', value: '7' },
+        { label: 'Item 8', value: '8' },
+    ];
+
     return (
         <View style={styles.mainContainer}>
             <ImageBackground source={wallpaper} resizeMode="cover" style={styles.image}>
+                <View>
+                    <View style={styles.dropdownContainer}>
+                        {renderLabel()}
+                        <Dropdown
+                            style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                            placeholderStyle={styles.placeholderStyle}
+                            selectedTextStyle={styles.selectedTextStyle}
+                            inputSearchStyle={styles.inputSearchStyle}
+                            iconStyle={styles.iconStyle}
+                            data={data}
+                            search
+                            maxHeight={300}
+                            labelField="label"
+                            valueField="value"
+                            placeholder={!isFocus ? 'Select item' : '...'}
+                            searchPlaceholder="Search..."
+                            value={value}
+                            onFocus={() => setIsFocus(true)}
+                            onBlur={() => setIsFocus(false)}
+                            onChange={item => {
+                                setValue(item.value);
+                                setIsFocus(false);
+                            }}
+                            renderItem={renderItem}
+                        />
+                    </View>
+                </View>
                 <View style={styles.timerContainer}>
+                    <View style={styles.container}>
+
+                    </View>
                     <CountdownCircleTimer
                         isPlaying={isRunning}
                         duration={status.duration}
@@ -145,7 +189,7 @@ const PomodoroScreen = () => {
                                             </TouchableOpacity>
                                         </>
                                         :
-                                        <View style={{flexDirection : 'row'}}>
+                                        <View style={{ flexDirection: 'row' }}>
                                             <TouchableOpacity onPress={handleStop} style={styles.button}>
                                                 <MaterialCommunityIcons name={'play'} color={'black'} size={30}></MaterialCommunityIcons>
                                                 <Text style={styles.buttonText}>
@@ -260,5 +304,55 @@ const styles = StyleSheet.create({
     },
     modeIcons: {
         color: 'white'
-    }
+    },
+    dropdownContainer: {
+        padding: 16,
+    },
+    dropdown: {
+        height: 50,
+        borderColor: 'gray',
+        borderWidth: 0.5,
+        borderRadius: 8,
+        paddingHorizontal: 8,
+        color: 'black'
+    },
+    icon: {
+        marginRight: 5,
+    },
+    label: {
+        position: 'absolute',
+        left: 22,
+        top: 8,
+        zIndex: 999,
+        paddingHorizontal: 8,
+        fontSize: 14,
+    },
+    placeholderStyle: {
+        fontSize: 16,
+        color: 'black'
+    },
+    selectedTextStyle: {
+        fontSize: 16,
+        color: 'black'
+    },
+    iconStyle: {
+        width: 20,
+        height: 20,
+    },
+    inputSearchStyle: {
+        height: 40,
+        fontSize: 16,
+        color: 'black'
+    },
+    item: {
+        padding: 17,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    textItem: {
+        flex: 1,
+        fontSize: 16,
+        color: 'black'
+    },
 });

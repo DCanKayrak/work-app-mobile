@@ -21,6 +21,7 @@ const StackNavigator = () => {
 
     useEffect(() => {
         checkIsLoggedIn();
+        console.log("Başarılı giriş - Stack Navigator")
     }, [userToken])
 
     return (

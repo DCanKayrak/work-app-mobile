@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { PostWithoutAuth } from '../services/HttpService';
+import AsyncStore
 import { useNavigation } from '@react-navigation/native';
 
 export const AuthContext = createContext();
@@ -24,7 +24,6 @@ export const AuthProvider = ({children}) => {
                     setUserToken(result.data.token);
                 } else {
                     console.log(result.message);
-                    //setError(result.message);
                 }
             })
             .catch((err) => console.log(err.message));

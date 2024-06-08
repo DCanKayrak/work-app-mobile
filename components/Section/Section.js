@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React from 'react';
+import { Divider } from 'react-native-paper';
 
 const Section = ({ section, children, handleShow }) => {
     return (
@@ -18,6 +19,7 @@ const Section = ({ section, children, handleShow }) => {
             </View>
 
             {children}
+            <Divider />
         </View>
     )
 }
@@ -26,9 +28,16 @@ export default Section
 
 const styles = StyleSheet.create({
     section: {
-        borderWidth: 1,
-        borderColor: 'gray',
-        padding: 25
+        padding: 25,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 11,
+        },
+        shadowOpacity: 0.57,
+        shadowRadius: 30,
+
+        elevation: 23,
     },
     sectionTitleContainer: {
         flexDirection: 'row',
@@ -37,7 +46,8 @@ const styles = StyleSheet.create({
     },
     sectionTitle: {
         color: 'black',
-        fontSize: 22,
-        fontWeight: '600'
+        fontSize: 20,
+        fontWeight: '600',
+        letterSpacing: 1,
     },
 })
