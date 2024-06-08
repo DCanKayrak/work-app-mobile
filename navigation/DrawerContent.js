@@ -13,13 +13,13 @@ import { AuthContext } from '../contexts/AuthContext';
 const DrawerList = [
     { icon: 'home-outline', label: 'Home', navigateTo: 'Home' },
     { icon: 'clock-outline', label: 'Pomodoro', navigateTo: 'Pomodoro' },
+    { icon: 'trophy', label: 'Collections', navigateTo: 'Collections'},
     { icon: 'bell-badge-outline', label: 'Notifications', navigateTo: 'Notifications' },
-    { icon: 'account-multiple', label: 'Profile', navigateTo: 'Profile' },
+    { icon: 'trophy', label: 'Leaderboard', navigateTo:'Leaderboard'},
     { icon: 'calendar-clock', label: 'Calendar', navigateTo: 'Calendar' },
     { icon: 'chart-bell-curve-cumulative', label: 'Stats', navigateTo: 'Stats' },
-    { icon: 'account-box', label: 'Settings', navigateTo: 'Settings' },
-    { icon: 'trophy', label: 'Leaderboard', navigateTo:'Leaderboard'},
-    { icon: 'trophy', label: 'Collections', navigateTo: 'Collections'}
+    { icon: 'account-box', label: 'Settings', navigateTo: 'Settings' },  
+    { icon: 'account-multiple', label: 'Profile', navigateTo: 'Profile' },
 ];
 
 const SettingsDrawerList = [
@@ -58,7 +58,7 @@ function DrawerContent(props) {
 
     const {userToken, logout} = useContext(AuthContext);
     
-    const handleGetNotifications = async () => {
+    const handleGetAuthUser = async () => {
         console.log(userToken)
         let token = "Bearer " + userToken
         console.log(token)
@@ -70,11 +70,7 @@ function DrawerContent(props) {
             },
         }).then((res) => res.json())
         .then((res) => {
-            if (res.success) {
-                console.log("Başarılı")
-            }
-            console.log("Başarısız - DrawerContent")
-            console.log(res)
+            setUser(res)
     });
     };
 
@@ -83,9 +79,8 @@ function DrawerContent(props) {
     }
 
     useEffect(() => {
-        handleGetNotifications();
-        console.log(GetUser().then((token) => setUser(token)))
-    })
+        handleGetAuthUser();
+    },[])
 
     return (
         <View style={{ flex: 1 }}>
@@ -109,9 +104,9 @@ function DrawerContent(props) {
                                     style={{ marginTop: 5 }}
                                 />
                                 <View style={{ marginLeft: 10, flexDirection: 'column' }}>
-                                    <Title style={styles.title}>Adarsh</Title>
+                                    <Title style={styles.title}>{user.firstName} {user.lastName}</Title>
                                     <Text style={styles.caption} numberOfLines={1}>
-                                        adarshthakur210@gmail.com
+                                        {user.email}
                                     </Text>
                                 </View>
                             </View>
@@ -183,7 +178,7 @@ const styles = StyleSheet.create({
     caption: {
         fontSize: 13,
         lineHeight: 14,
-        // color: '#6e6e6e',
+        color: '#6e6e6e',
         width: '100%',
     },
     row: {

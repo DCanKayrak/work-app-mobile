@@ -12,13 +12,13 @@ const GetAuthorize = async () => {
     return token ? `Bearer ${token}` : null;
 };
 
-export const GetWithAuth = (url, userToken) => {
+export const GetWithAuth = async (url) => {
     const token = GetAuthorize();
     const request = fetch(GetFullUrl(url), {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": userToken,
+            "Authorization": await GetAuthorize(),
         },
     });
 

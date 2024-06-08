@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { DrawerItem, createDrawerNavigator } from '@react-navigation/drawer';
-import { Home, Profile, Settings, Tabs, Login, Register, Notifications, Agenda, Pomodoro, Leaderboard, Collection } from '../screens';
+import { Home, Profile, Settings, Tabs, Login, Register, Notifications, Agenda, Pomodoro, Leaderboard, Collection, Stats } from '../screens';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import DrawerContent from './DrawerContent';
@@ -20,6 +20,7 @@ const DrawerNav = () => {
 
       <Drawer.Screen name="Profile" component={Profile} />
       <Drawer.Screen name="Calendar" component={Agenda} />
+      <Drawer.Screen name="Stats" component={Stats} />
 
       <Drawer.Screen name="Settings" component={Settings} />
       <Drawer.Screen name="Leaderboard" component={Leaderboard}/>

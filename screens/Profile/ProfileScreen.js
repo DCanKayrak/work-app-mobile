@@ -23,9 +23,6 @@ const usersDummy = [
 const ProfileScreen = () => {
   return (
     <ScrollView style={styles.container}>
-      <View style={{ direction: 'ltr' }}>
-        <MaterialCommunityIcons style={styles.socialMediaIcon} name={'account-settings'} color={'black'} size={28} />
-      </View>
 
       <View style={[styles.section, { borderWidth: 0 }]}>
         <View style={styles.imgContainer}>

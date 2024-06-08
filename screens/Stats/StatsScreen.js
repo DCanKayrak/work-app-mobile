@@ -6,6 +6,8 @@ import CustomBarChart from '../../components/CustomBarChart/CustomBarChart';
 import CustomProcessRing from '../../components/CustomProcessRing/CustomProcessRing';
 import CustomSegmentedButtons from '../../components/CustomSegmentedButtons/CustomSegmentedButtons';
 
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 const StatsScreen = () => {
 
   const [value, setValue] = React.useState('walk');
@@ -50,7 +52,15 @@ const StatsScreen = () => {
       ]} value={value} setValue={setValue}></CustomSegmentedButtons>
 
       <Section section={{ id: 4, name: '' }}>
-        <CustomContributionChart></CustomContributionChart>
+        <View style={styles.achievementContainer}>
+          <View>
+            <MaterialCommunityIcons name={'star-four-points'} color={'black'} size={30} />
+          </View>
+          <View style={{ alignItems: 'flex-end' }}>
+            <Text style={{ color: 'black', fontSize: 18 }}>18000</Text>
+            <Text style={styles.achievement}>Lig Puanı</Text>
+          </View>
+        </View>
       </Section>
 
       <Section section={{ id: 1, name: 'Contribution Chart' }}>
@@ -83,5 +93,21 @@ const styles = StyleSheet.create({
 
   chart: {
     marginTop: 50,
-  }
+  },
+
+  achievementContainer: {
+    width: 150,
+    margin: 5,
+    padding: 20,
+    borderWidth: 0.5,
+    borderColor: 'gray',
+    borderRadius: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10
+  },
+  achievement: {
+    color: 'gray'
+  },
 });

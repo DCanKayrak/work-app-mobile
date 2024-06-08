@@ -6,12 +6,19 @@ const LeftContent = props => <Avatar.Icon style={{backgroundColor : 'blue'}} {..
 
 const NotificationItem = ({ item }) => {
     return (
-        <Card>
-            <Card.Title title="Card Title" subtitle="Card Subtitle" left={LeftContent} />
+        <Card style={item.isRead ? styles.normal: styles.notRead}>
+            <Card.Title title={item.message} subtitle='Görüntülemek için tıklayın' left={LeftContent} />
         </Card>
     )
 }
 
 export default NotificationItem
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    normal : {
+        backgroundColor: 'white'
+    },
+    notRead: {
+        backgroundColor: '#E8D6FD'
+    }
+})

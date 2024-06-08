@@ -25,7 +25,6 @@ const Notifications = () => {
 
     useEffect(() => {
         handleGetNotifications();
-        console.log(notifications)
     }, []);
 
     return (

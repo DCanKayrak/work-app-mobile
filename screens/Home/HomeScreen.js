@@ -5,6 +5,8 @@ import CircularProgress from 'react-native-circular-progress-indicator';
 import { screenWidth } from 'react-native-gifted-charts/src/utils';
 import { Searchbar, FAB, Portal } from 'react-native-paper';
 import homeBg from '../../assets/img/home-bg.png';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 const HomeScreen = () => {
 
@@ -15,7 +17,7 @@ const HomeScreen = () => {
   return (
     <ScrollView style={styles.container}>
       <View style={{ flexDirection: 'row' }}>
-        <View style={{ width: '45%'}}>
+        <View style={{ width: '45%' }}>
           <Image
             source={homeBg}
             style={{ width: 250, height: 150 }}
@@ -37,17 +39,66 @@ const HomeScreen = () => {
 
       <View style={styles.section}>
         <View style={styles.sectionTitleContainer}>
-          <Text style={styles.sectionTitle}>Section Title</Text>
+          <Text style={styles.sectionTitle}>Son Çalışmalarınız</Text>
           <TouchableOpacity>
             <Text style={styles.sectionTitle}>View More</Text>
           </TouchableOpacity>
         </View>
-        
-        <View style={{ backgroundColor : 'red', width: '50%'}}>
-          <Text>123</Text>
-        </View>
-      </View>
 
+
+        <ScrollView horizontal={true}>
+          <View style={styles.achievementContainer}>
+            <View>
+              <MaterialCommunityIcons name={'star-four-points'} color={'black'} size={30} />
+            </View>
+            <View style={{ alignItems: 'flex-end' }}>
+              <Text style={{ color: 'black', fontSize: 18 }}>18000</Text>
+              <Text style={styles.achievement}>Lig Puanı</Text>
+            </View>
+          </View>
+
+          <View style={styles.achievementContainer}>
+            <View>
+              <MaterialCommunityIcons name={'star-four-points'} color={'black'} size={30} />
+            </View>
+            <View style={{ alignItems: 'flex-end' }}>
+              <Text style={{ color: 'black', fontSize: 18 }}>18000</Text>
+              <Text style={styles.achievement}>Lig Puanı</Text>
+            </View>
+          </View>
+
+          <View style={styles.achievementContainer}>
+            <View>
+              <MaterialCommunityIcons name={'star-four-points'} color={'black'} size={30} />
+            </View>
+            <View style={{ alignItems: 'flex-end' }}>
+              <Text style={{ color: 'black', fontSize: 18 }}>18000</Text>
+              <Text style={styles.achievement}>Lig Puanı</Text>
+            </View>
+          </View>
+
+          <View style={styles.achievementContainer}>
+            <View>
+              <MaterialCommunityIcons name={'star-four-points'} color={'black'} size={30} />
+            </View>
+            <View style={{ alignItems: 'flex-end' }}>
+              <Text style={{ color: 'black', fontSize: 18 }}>18000</Text>
+              <Text style={styles.achievement}>Lig Puanı</Text>
+            </View>
+          </View>
+
+          <View style={styles.achievementContainer}>
+            <View>
+              <MaterialCommunityIcons name={'star-four-points'} color={'black'} size={30} />
+            </View>
+            <View style={{ alignItems: 'flex-end' }}>
+              <Text style={{ color: 'black', fontSize: 18 }}>18000</Text>
+              <Text style={styles.achievement}>Lig Puanı</Text>
+            </View>
+          </View>
+          
+        </ScrollView>
+      </View>
     </ScrollView>
   );
 };
@@ -57,7 +108,7 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
-    paddingVertical: 16
+    paddingVertical: 16,
   },
   section: {
     marginTop: 20
@@ -69,9 +120,23 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: 'black',
-    fontSize: 16
+    fontSize: 20,
+    fontWeight: '700'
   },
-  image: {
 
+  achievementContainer: {
+    width: 150,
+    margin: 5,
+    padding: 20,
+    borderWidth: 0.5,
+    borderColor: 'gray',
+    borderRadius: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10
+  },
+  achievement: {
+    color: 'gray'
   },
 });
